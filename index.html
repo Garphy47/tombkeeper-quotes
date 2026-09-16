@@ -102,6 +102,7 @@ html.drawer-open{overflow:hidden}
 .pnbtn[disabled]{opacity:.42;cursor:default;box-shadow:none;color:var(--muted)}
 .pnbtn[disabled]:hover{background:var(--mat);color:var(--muted)}
 #rail .pnbtn{width:104px;text-align:center;justify-content:center;display:flex}
+.pnbtn .ic{display:none}
 #toc.active{background:var(--chip-bg);color:var(--accent);border-color:transparent}
 #closeNav{display:none;position:absolute;top:14px;right:12px;width:34px;height:34px;
   align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--line);
@@ -206,7 +207,7 @@ footer.foot{color:var(--muted);font-size:13px;line-height:1.9;padding:26px 4px 0
   #closeNav{display:flex;top:calc(12px + env(safe-area-inset-top))}
   .brand{padding-right:44px}
   #collapse{min-height:44px}
-  main{padding:26px 0 calc(118px + env(safe-area-inset-bottom))}
+  main{padding:26px 0 calc(104px + env(safe-area-inset-bottom))}
   .item{padding:22px 18px 24px;border-radius:15px;
     overflow-wrap:anywhere;word-break:break-word}
   .item .body a,.item a.out{word-break:break-all}
@@ -216,9 +217,22 @@ footer.foot{color:var(--muted);font-size:13px;line-height:1.9;padding:26px 4px 0
   .code{font-size:12.5px;padding:14px}
   .clamp{max-height:340px}
   blockquote{padding:10px 14px}
-  #rail{right:calc(12px + env(safe-area-inset-right));bottom:calc(22px + env(safe-area-inset-bottom));gap:7px}
-  #rail .pnbtn{font-size:13px;padding:12px 14px;width:98px;min-height:44px}
-  #top{width:44px;height:44px;font-size:16px}
+  /* 底部工具栏：下滑阅读时自动收起，上滑或回到顶部时滑出 */
+  #rail{left:0;right:0;bottom:0;flex-direction:row;align-items:stretch;gap:0;
+    padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+    background:var(--mat);border-top:1px solid var(--line2);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
+    box-shadow:0 -2px 16px rgba(0,0,0,.06);
+    transform:translateY(0);transition:transform .22s ease}
+  #rail.bar-hidden{transform:translateY(115%)}
+  #rail .pnbtn{flex:1 1 0;width:auto;min-width:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:3px;padding:5px 2px;min-height:50px;
+    border:0;background:transparent;box-shadow:none;font-size:11.5px;line-height:1.2;
+    color:var(--text2);border-radius:12px}
+  #rail .pnbtn:active{background:var(--chip-bg);color:var(--accent)}
+  #rail .pnbtn .ic{display:block;width:19px;height:19px}
+  #rail .pnbtn[disabled]{opacity:.3;color:var(--muted);box-shadow:none}
+  #top{position:absolute;right:2px;bottom:calc(100% + 10px);width:42px;height:42px;font-size:15px}
   .hero-tools .btn{padding:12px 18px;min-height:44px}
   .pnbtn,.btn,#collapse,nav a,#top,.more button{touch-action:manipulation}
 }
@@ -4608,10 +4622,10 @@ def xiao_ming(x):
 </div>
 <button id="scrim" type="button" aria-label="关闭目录" tabindex="-1"></button>
 <div id="rail">
-  <button class="pnbtn" id="toc" type="button">目录</button>
-  <button class="pnbtn" id="random" type="button">随手一翻</button>
-  <button class="pnbtn" type="button" data-pn="prev">← 上一条</button>
-  <button class="pnbtn" type="button" data-pn="next">下一条 →</button>
+  <button class="pnbtn" id="toc" type="button"><span class="ic"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5h13M3.5 10h13M3.5 15h13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="lb" id="lbToc">目录</span></button>
+  <button class="pnbtn" id="random" type="button"><span class="ic"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.4 10a6.4 6.4 0 1 1-1.9-4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M16.9 3.2v3.4h-3.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lb" id="lbRandom">随手一翻</span></button>
+  <button class="pnbtn" type="button" data-pn="prev"><span class="ic"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.4 4.2 6.6 10l5.8 5.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lb" id="lbPrev">&larr; 上一条</span></button>
+  <button class="pnbtn" type="button" data-pn="next"><span class="ic"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.6 4.2 13.4 10l-5.8 5.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lb" id="lbNext">下一条 &rarr;</span></button>
   <button id="top" type="button" aria-label="回到顶部">↑</button>
 </div>
 <script>
@@ -4631,6 +4645,8 @@ def xiao_ming(x):
   var aside=document.querySelector('aside');
   var nav=document.querySelector('nav');
   var toc=document.getElementById('toc');
+  var rail=document.getElementById('rail');
+  var lastY=window.scrollY;
   var isNarrow=function(){return matchMedia('(max-width:920px)').matches};
 
   if(localStorage.getItem('tk-nav')==='1') root.classList.add('nav-collapsed');
@@ -4650,6 +4666,7 @@ def xiao_ming(x):
   function setDrawer(open){
     aside.classList.toggle('open',open);
     root.classList.toggle('drawer-open',open&&isNarrow());
+    if(rail)rail.classList.toggle('bar-hidden',open&&isNarrow());
     syncToc();
   }
   document.getElementById('collapse').onclick=function(){
@@ -4663,10 +4680,17 @@ def xiao_ming(x):
   var closeNav=document.getElementById('closeNav');
   if(closeNav)closeNav.onclick=function(){setDrawer(false)};
   var collapseLabel=document.getElementById('collapseLabel');
-  function syncLabels(){if(collapseLabel)collapseLabel.textContent=isNarrow()?' 关闭目录':' 收起目录';}
+  var lbToc=document.getElementById('lbToc'),lbRandom=document.getElementById('lbRandom'),
+      lbPrev=document.getElementById('lbPrev'),lbNext=document.getElementById('lbNext');
+  function syncLabels(){
+    var n=isNarrow();
+    if(collapseLabel)collapseLabel.textContent=n?' 关闭目录':' 收起目录';
+    if(lbToc){lbToc.textContent='目录';lbRandom.textContent=n?'随机':'随手一翻';
+      lbPrev.textContent=(n?'':'\u2190 ')+'上一条';lbNext.textContent='下一条'+(n?'':' \u2192');}
+  }
   addEventListener('resize',syncLabels);
   syncLabels();
-  addEventListener('resize',function(){if(!isNarrow())setDrawer(false)});
+  addEventListener('resize',function(){if(!isNarrow()){setDrawer(false);if(rail)rail.classList.remove('bar-hidden');}});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')setDrawer(false)});
   syncToc();
 
@@ -4686,8 +4710,16 @@ def xiao_ming(x):
 
   function onScroll(){
     var h=document.documentElement.scrollHeight-window.innerHeight;
-    bar.style.width=(h>0?(window.scrollY/h*100):0)+'%';
-    topBtn.classList.toggle('show',window.scrollY>600);
+    var y=window.scrollY;
+    bar.style.width=(h>0?(y/h*100):0)+'%';
+    topBtn.classList.toggle('show',y>600);
+    if(rail){
+      if(isNarrow()){
+        if(y<90||y>=h-4)rail.classList.remove('bar-hidden');
+        else if(Math.abs(y-lastY)>8)rail.classList.toggle('bar-hidden',y>lastY);
+      }else{rail.classList.remove('bar-hidden');}
+    }
+    lastY=y;
     var idx=curIndex(),cur=items[idx];
     prevBtns.forEach(function(b){b.disabled=idx<=0});
     nextBtns.forEach(function(b){b.disabled=idx>=items.length-1});
