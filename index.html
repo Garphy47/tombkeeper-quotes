@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme:light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme:dark)">
 <meta name="color-scheme" content="light dark">
 <title>tombkeeper · 引发思考的文字</title>
 <meta name="description" content="tombkeeper 引发思考的文字合集，472 条，单文件离线阅读版。">
@@ -79,10 +81,13 @@ nav a.on b{color:var(--accent)}
 #collapse:active{transform:scale(.985)}
 #collapse svg{width:12px;height:12px;flex:none}
 
-/* ---------- 收起状态 ---------- */
-html.nav-collapsed .wrap{grid-template-columns:minmax(0,1fr)}
-html.nav-collapsed aside{display:none}
-html.nav-collapsed main{max-width:828px;margin:0 auto;width:100%}
+/* ---------- 收起状态（只在宽屏生效，手机端用抽屉） ---------- */
+@media (min-width:921px){
+  html.nav-collapsed .wrap{grid-template-columns:minmax(0,1fr)}
+  html.nav-collapsed aside{display:none}
+  html.nav-collapsed main{max-width:828px;margin:0 auto;width:100%}
+}
+html.drawer-open{overflow:hidden}
 
 /* ---------- 右下常驻控制 ---------- */
 #rail{position:fixed;right:26px;bottom:26px;display:flex;flex-direction:column;
@@ -98,12 +103,22 @@ html.nav-collapsed main{max-width:828px;margin:0 auto;width:100%}
 .pnbtn[disabled]:hover{background:var(--mat);color:var(--muted)}
 #rail .pnbtn{width:104px;text-align:center;justify-content:center;display:flex}
 #toc.active{background:var(--chip-bg);color:var(--accent);border-color:transparent}
+#closeNav{display:none;position:absolute;top:14px;right:12px;width:34px;height:34px;
+  align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--line);
+  background:var(--card);color:var(--text2);font-size:14px;line-height:1;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation}
 #top{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
   background:var(--mat);color:var(--text);cursor:pointer;display:none;place-items:center;
   -webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
   box-shadow:var(--shadow);font-size:16px;line-height:1;transition:.2s}
 #top.show{display:grid}
 #top:hover{background:var(--mat-hover);color:var(--accent)}
+
+/* ---------- 手机抽屉遮罩 ---------- */
+#scrim{position:fixed;inset:0;background:rgba(0,0,0,.34);z-index:65;opacity:0;
+  pointer-events:none;transition:opacity .24s;-webkit-tap-highlight-color:transparent}
+html.drawer-open #scrim{opacity:1;pointer-events:auto}
+@media (min-width:921px){#scrim{display:none}}
 
 /* ---------- 正文 ---------- */
 main{padding:64px 0 120px;min-width:0}
@@ -179,18 +194,38 @@ footer.foot{color:var(--muted);font-size:13px;line-height:1.9;padding:26px 4px 0
   border-top:1px solid var(--line2)}
 
 @media (max-width:920px){
-  .wrap{display:block;padding:0 18px}
-  aside{position:fixed;inset:0 auto 0 0;width:292px;height:100%;background:var(--bg);
-    border-right:1px solid var(--line);padding:22px 14px;z-index:70;
+  .wrap{display:block;padding:0 16px}
+  aside{position:fixed;inset:0 auto 0 0;width:min(86vw,320px);height:100%;background:var(--bg);
+    border-right:1px solid var(--line);
+    padding:calc(18px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));
+    z-index:70;
     transform:translateX(-102%);transition:transform .26s cubic-bezier(.32,.72,0,1);
-    box-shadow:0 0 60px rgba(0,0,0,.18)}
+    box-shadow:0 0 60px rgba(0,0,0,.18);overscroll-behavior:contain}
   aside.open{transform:none}
-  main{padding:34px 0 110px}
-  .item{padding:24px 20px 26px;border-radius:15px}
+  nav a{padding:9px 10px;font-size:14px}
+  #closeNav{display:flex;top:calc(12px + env(safe-area-inset-top))}
+  .brand{padding-right:44px}
+  #collapse{min-height:44px}
+  main{padding:26px 0 calc(118px + env(safe-area-inset-bottom))}
+  .item{padding:22px 18px 24px;border-radius:15px;
+    overflow-wrap:anywhere;word-break:break-word}
+  .item .body a,.item a.out{word-break:break-all}
   .head{flex-direction:column;gap:8px}
-  #rail{right:16px;bottom:18px;gap:7px}
-  #rail .pnbtn{font-size:12.5px;padding:9px 12px;width:92px}
-  #top{width:38px;height:38px;font-size:15px}
+  .head h2 .chip{white-space:normal}
+  .fig img{border-radius:10px}
+  .code{font-size:12.5px;padding:14px}
+  .clamp{max-height:340px}
+  blockquote{padding:10px 14px}
+  #rail{right:calc(12px + env(safe-area-inset-right));bottom:calc(22px + env(safe-area-inset-bottom));gap:7px}
+  #rail .pnbtn{font-size:13px;padding:12px 14px;width:98px;min-height:44px}
+  #top{width:44px;height:44px;font-size:16px}
+  .hero-tools .btn{padding:12px 18px;min-height:44px}
+  .pnbtn,.btn,#collapse,nav a,#top,.more button{touch-action:manipulation}
+}
+@media (max-width:400px){
+  .wrap{padding:0 12px}
+  .item{padding:20px 15px 22px}
+  #rail .pnbtn{font-size:12.5px;padding:11px 11px;width:88px}
 }
 @media print{
   aside,#top,#bar,.hero-tools,.more,#rail{display:none!important}
@@ -206,7 +241,8 @@ footer.foot{color:var(--muted);font-size:13px;line-height:1.9;padding:26px 4px 0
 <div class="wrap">
 
 <aside>
-  <div class="brand">引发思考的文字 <span>· tombkeeper</span></div>
+  <div class="brand">引发思考的文字 <span>· tombkeeper</span>
+    <button id="closeNav" type="button" aria-label="关闭目录">✕</button></div>
   <div class="search"><input id="q" type="search" placeholder="搜索标题 / 编号" autocomplete="off" spellcheck="false"></div>
   <div class="count" id="count">472 条</div>
   <nav>
@@ -687,7 +723,7 @@ footer.foot{color:var(--muted);font-size:13px;line-height:1.9;padding:26px 4px 0
     <button id="collapse" type="button">
       <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.6 1.6 3.2 6l4.4 4.4"
         fill="none" stroke="currentColor" stroke-width="1.6"
-        stroke-linecap="round" stroke-linejoin="round"/></svg>收起目录
+        stroke-linecap="round" stroke-linejoin="round"/></svg><span id="collapseLabel">收起目录</span>
     </button>
   </div>
 </aside>
@@ -4570,6 +4606,7 @@ def xiao_ming(x):
   </footer>
 </main>
 </div>
+<button id="scrim" type="button" aria-label="关闭目录" tabindex="-1"></button>
 <div id="rail">
   <button class="pnbtn" id="toc" type="button">目录</button>
   <button class="pnbtn" id="random" type="button">随手一翻</button>
@@ -4608,11 +4645,29 @@ def xiao_ming(x):
     localStorage.setItem('tk-nav',collapsed?'1':'0');
     syncToc();
   }
-  document.getElementById('collapse').onclick=function(){setNav(true)};
-  toc.onclick=function(){
-    if(isNarrow()){aside.classList.toggle('open');syncToc();}
-    else{setNav(!root.classList.contains('nav-collapsed'));}
+  var scrim=document.getElementById('scrim');
+  function drawerOpen(){return aside.classList.contains('open')}
+  function setDrawer(open){
+    aside.classList.toggle('open',open);
+    root.classList.toggle('drawer-open',open&&isNarrow());
+    syncToc();
+  }
+  document.getElementById('collapse').onclick=function(){
+    if(isNarrow())setDrawer(false);else setNav(true);
   };
+  toc.onclick=function(){
+    if(isNarrow())setDrawer(!drawerOpen());
+    else setNav(!root.classList.contains('nav-collapsed'));
+  };
+  if(scrim)scrim.onclick=function(){setDrawer(false)};
+  var closeNav=document.getElementById('closeNav');
+  if(closeNav)closeNav.onclick=function(){setDrawer(false)};
+  var collapseLabel=document.getElementById('collapseLabel');
+  function syncLabels(){if(collapseLabel)collapseLabel.textContent=isNarrow()?' 关闭目录':' 收起目录';}
+  addEventListener('resize',syncLabels);
+  syncLabels();
+  addEventListener('resize',function(){if(!isNarrow())setDrawer(false)});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')setDrawer(false)});
   syncToc();
 
   function curIndex(){
@@ -4626,7 +4681,7 @@ def xiao_ming(x):
     return t;
   }
   prevBtns.concat(nextBtns).forEach(function(b){
-    b.onclick=function(){go(b.dataset.pn==='prev'?-1:1)};
+    b.onclick=function(){setDrawer(false);go(b.dataset.pn==='prev'?-1:1)};
   });
 
   function onScroll(){
@@ -4653,7 +4708,7 @@ def xiao_ming(x):
     root.setAttribute('data-theme',next);localStorage.setItem('tk-theme',next);
   };
   topBtn.onclick=function(){scrollTo({top:0,behavior:'smooth'})};
-  links.forEach(function(a){a.onclick=function(){aside.classList.remove('open');syncToc()}});
+  links.forEach(function(a){a.onclick=function(){setDrawer(false)}});
 
   var input=document.getElementById('q');
   var counter=document.getElementById('count');
@@ -4671,11 +4726,12 @@ def xiao_ming(x):
     if(e.key==='Escape'){input.value='';filter();input.blur();}
     if(e.key==='Enter'){
       var f=links.filter(function(a){return a.style.display!=='none'})[0];
-      if(f){location.hash=f.getAttribute('href');aside.classList.remove('open');syncToc();}
+      if(f){location.hash=f.getAttribute('href');setDrawer(false);}
     }
   });
 
   document.getElementById('random').onclick=function(){
+    setDrawer(false);
     var it=items[Math.floor(Math.random()*items.length)];
     it.scrollIntoView({behavior:'smooth',block:'start'});
     it.classList.add('flash');setTimeout(function(){it.classList.remove('flash')},1400);
@@ -4694,7 +4750,7 @@ def xiao_ming(x):
     if(e.metaKey||e.ctrlKey||e.altKey)return;
     var t=e.target.tagName;
     if(t==='INPUT'||t==='TEXTAREA')return;
-    if(e.key==='/'){e.preventDefault();aside.classList.add('open');syncToc();
+    if(e.key==='/'){e.preventDefault();setDrawer(true);
       input.focus();input.select();return;}
     if(e.key==='ArrowLeft'||e.key==='k'||e.key==='ArrowRight'||e.key==='j'){
       e.preventDefault();
