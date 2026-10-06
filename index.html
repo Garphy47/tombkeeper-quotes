@@ -173,6 +173,11 @@ a.ref:hover{text-decoration:none;background:var(--accent);color:#fff}
   font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
   font-size:13.5px;line-height:1.75;color:var(--text2)}
 .code code{white-space:pre-wrap;word-break:break-word}
+/* 防横向溢出：代码块/图片/表格一律不撑宽页面 */
+.item pre{max-width:100%;overflow-x:auto;margin:0 0 16px}
+.item pre code{white-space:pre-wrap;word-break:break-word}
+.item img,.item figure,.item table,.item iframe{max-width:100%}
+.item table{display:block;overflow-x:auto}
 .fig{margin:20px 0;text-align:center}
 .fig img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--line2);
   display:block;margin:0 auto;background:var(--bg2)}
@@ -195,6 +200,7 @@ footer.foot{color:var(--muted);font-size:13px;line-height:1.9;padding:26px 4px 0
   border-top:1px solid var(--line2)}
 
 @media (max-width:920px){
+html,body{overflow-x:hidden;max-width:100%}
   .wrap{display:block;padding:0 16px}
   aside{position:fixed;inset:0 auto 0 0;width:min(86vw,320px);height:100%;background:var(--bg);
     border-right:1px solid var(--line);
@@ -858,6 +864,7 @@ footer.foot{color:var(--muted);font-size:13px;line-height:1.9;padding:26px 4px 0
       <button class="btn" id="theme" type="button">切换深浅色</button>
     </div>
   </header>
+
 
 
 
@@ -2034,7 +2041,7 @@ footer.foot{color:var(--muted);font-size:13px;line-height:1.9;padding:26px 4px 0
 <section class="item" id="item-128" data-num="128">
   <div class="head"><span class="badge">128</span><h2><span class="chip" title="笔记：自己的决定，和别人是没关系的">自己的决定，和别人是没关系的</span></h2></div>
   <div class="body">
-<pre><code>def mei_tou_nao(x):
+<pre class="code"><code>def mei_tou_nao(x):
     return x
 
 def bu_gao_xing(x):
@@ -2266,20 +2273,20 @@ def xiao_ming(x):
   <div class="head"><span class="badge">155</span><h2><span class="chip" title="笔记：5、你去买盲盒，问我盲盒里是什么">5、你去买盲盒，问我盲盒里是什么</span></h2></div>
   <div class="body">
 <p>你去买盲盒，问我盲盒里是什么。你手拿着盲盒都不知道里面是什么，我怎么可能知道呢？所以，我以前说过，人生选择类的问题，我都不知道答案（</p>
-<pre><code>古人说：鼠在所居，人固择地。然而古人又说：宁为鸡首，不为牛后。
+<pre class="code"><code>古人说：鼠在所居，人固择地。然而古人又说：宁为鸡首，不为牛后。
 古人说：乱世出英雄。然而古人又说：宁做太平犬，不做乱世人。
 所以，选什么专业、要不要考研、去不去北上广、红玫瑰还是白玫瑰——我们想要的答案从来都没那么简单。
 得看自己是什么情况，所处的环境所遇到的问题又是什么情况。这些情况根本不可能用几句话描述清楚。
 必须得自己去分析，自己做决定，别人给不了答案。 
 要不然，生而为人就太容易了。</code></pre>
-<pre><code>最近有好几个毕业生问我关于 Offer 选择的问题——你可以问我某家公司在某个领域是什么情况，也可以问我某个技术方向好不好，但我不知道你是谁，不知道你是什么性格，不知道你是什么水平，不知道你家庭情况如何，我对你完全不了解，也不可能通过你几句话介绍就能了解，我也没有对发 Offer 的这几家公司做过调研分析，怎么可能知道什么选择适合你呢？
+<pre class="code"><code>最近有好几个毕业生问我关于 Offer 选择的问题——你可以问我某家公司在某个领域是什么情况，也可以问我某个技术方向好不好，但我不知道你是谁，不知道你是什么性格，不知道你是什么水平，不知道你家庭情况如何，我对你完全不了解，也不可能通过你几句话介绍就能了解，我也没有对发 Offer 的这几家公司做过调研分析，怎么可能知道什么选择适合你呢？
 
 大学毕业的时候，我收到了 4 个 Offer。那时候我对安全行业了解很少，对这些公司更不了解。于是我花了数天时间，先把这些公司的网站都仔细看了，然后又搜索了这些公司的相关新闻，最后筛选出一南一北两家公司。我无法根据网上能看到的信息进一步判断，于是我坐火车去这两家公司分别看了一下，最后根据亲眼所见的情况做出了选择。后来事实证明我的选择的是对的。
 
 2014 年换工作的时候，我收到了 5 个 Offer。这时候我虽然对安全行业比较了解，对这些公司也比较了解，但人到中年，这种重大决定仍然是不能轻易做的。所以我非常认真地从各个角度这些公司进行了调研，包括打听详细的内部规章制度，甚至找做了多个投资的朋友问他们对这些公司未来发展情况的判断。
 
 为什么股市里散户干不过机构？因为散户看看网上的消息听听别人的忽悠就把自己多年辛苦的积蓄扔进去了。而机构是要实地调研的，要看一系列数据的。人生第一份工作非常重要，因为这是你第一次要把自己投资进去，所以必须自己下功夫。让别人帮自己做判断，就和听消息炒股的散户一样。</code></pre>
-<pre><code>有些人认为我似乎很擅长解决我自己遇到的问题，所以认为我也应该很擅长解决他们遇到的问题。然而绝大部分人从我这里得到的答案都是“我不知道”。因为我的确不知道。
+<pre class="code"><code>有些人认为我似乎很擅长解决我自己遇到的问题，所以认为我也应该很擅长解决他们遇到的问题。然而绝大部分人从我这里得到的答案都是“我不知道”。因为我的确不知道。
 
 如果你至少完成了小学二年级的课程，那么应该还记得《小马过河》。那里面就已经把道理讲的非常清楚了。
 
@@ -2316,15 +2323,15 @@ def xiao_ming(x):
 <section class="item" id="item-159" data-num="157">
   <div class="head"><span class="badge">157</span><h2><span class="chip" title="笔记：5、故事三篇">5、故事三篇</span></h2></div>
   <div class="body">
-<pre><code>前阵子一位记者问我为什么写东西。我说沟通是群居动物的内在需要。又问我难道生活中找不到人沟通吗。我说生活很小，世界很大。
+<pre class="code"><code>前阵子一位记者问我为什么写东西。我说沟通是群居动物的内在需要。又问我难道生活中找不到人沟通吗。我说生活很小，世界很大。
 
 互联网之伟大，就是让每个人都可以和整个世界的信息流建立联系。在互联网之前，印刷术或多或少地担负了这个使命，让孤独的灵魂有机会找到共鸣者。
 
 我见过有人表达对某作家叙事方式的憎恶，又或是对某作家语气的讨厌。而我读到他们的作品时，却有老友重逢的激动。我完全明白他们为什么要那样说话。我想说些什么时，常常发现也只能那样说话。
 
 那些原本也许会怀疑自己是怪物的人，现在可以哈哈一笑，掩卷释然。</code></pre>
-<pre><code>我遇到过的学文科从事文职工作的人，能做到写三百字邮件用词准确无歧义的，大概不到三分之一；能写个三五千字把一件事讲清楚的，不到二十分之一。当然学计算机毕业能写程序的也不多，只不过面试的时候比较容易识别。</code></pre>
-<pre><code>我们无法决定银幕上出现喜剧还是悲剧。但我们可以带着笑声或是眼泪欣赏，把这部电影作为我们人生体验的一部分，并确保有足够多的影评留下来。</code></pre></div>
+<pre class="code"><code>我遇到过的学文科从事文职工作的人，能做到写三百字邮件用词准确无歧义的，大概不到三分之一；能写个三五千字把一件事讲清楚的，不到二十分之一。当然学计算机毕业能写程序的也不多，只不过面试的时候比较容易识别。</code></pre>
+<pre class="code"><code>我们无法决定银幕上出现喜剧还是悲剧。但我们可以带着笑声或是眼泪欣赏，把这部电影作为我们人生体验的一部分，并确保有足够多的影评留下来。</code></pre></div>
 </section>
 <section class="item" id="item-160" data-num="158">
   <div class="head"><span class="badge">158</span><h2><span class="chip" title="笔记：认识规律，利用规律">认识规律，利用规律</span></h2></div>
@@ -5523,12 +5530,12 @@ def xiao_ming(x):
   <div class="head"><span class="badge">604</span><h2><span class="chip" title="笔记：用零知识证明思想做账号“转世”验证">用零知识证明思想做账号“转世”验证</span></h2></div>
   <div class="body">
 <p>群里偶尔会有人因为账号被封，然后换号重新加入。这种情况下，如何可信地证明自己就是之前的那个人呢？我设计了一种基于零知识证明思想的微博账号转世金瓶掣签制度。<br># 微博账号转世金瓶掣签操作指南<br>## 1. 旧账号存活时执行的操作<br>如需为转世做准备，可在终端运行以下命令：</p>
-<pre><code>openssl genpkey -algorithm Ed25519 -out private_key.pem
+<pre class="code"><code>openssl genpkey -algorithm Ed25519 -out private_key.pem
 openssl pkey -in private_key.pem -pubout -out public_key.pem</code></pre>
 <p>把 <code>public_key.pem</code> 发到群里，并妥善保管私钥文件 <code>private_key.pem</code>。<br>## 2. 使用新账号执行的操作<br>声明自己的旧帐号是什么，并请群内任意人发出挑战数据。推荐用当天某个微博热搜标签作为挑战数据。假设挑战数据保存在文件 <code>nonce.txt</code> 中，在终端运行以下命令：</p>
-<pre><code>openssl pkeyutl -sign -inkey private_key.pem -rawin -in nonce.txt -out sig.bin</code></pre>
+<pre class="code"><code>openssl pkeyutl -sign -inkey private_key.pem -rawin -in nonce.txt -out sig.bin</code></pre>
 <p>然后把文件 <code>sig.bin</code> 发回微博群。<br>## 3. 金瓶挚签<br>群友可对旧帐号所发出的公钥 <code>public_key.pem</code> 和新账号发出的 <code>sig.bin</code> 在终端执行以下命令：</p>
-<pre><code>openssl pkeyutl -verify -pubin -inkey public_key.pem -rawin -in nonce.txt -sigfile sig.bin</code></pre>
+<pre class="code"><code>openssl pkeyutl -verify -pubin -inkey public_key.pem -rawin -in nonce.txt -sigfile sig.bin</code></pre>
 <p>如果命令输出 <code>Signature Verified Successfully</code>，则证明新账号持有人确为旧账号本人，金瓶掣签成功。</p></div>
 </section>
 <section class="item" id="item-521" data-num="605">
@@ -5842,6 +5849,7 @@ openssl pkey -in private_key.pem -pubout -out public_key.pem</code></pre>
 <p>#减肥针停药半年内超八成人体重反弹# 这是必然的。</p>
 <p>（转发自己 2025-03-10 的微博）<br>#减肥4年后绝大多数人恢复之前体重# 我减肥至今没有反弹。不管选择什么减肥方式，都要做好心理建设，确定自己是选择了新的生活方式，而不是采取一个短期的行动。</p></div>
 </section>
+
 
 
 
